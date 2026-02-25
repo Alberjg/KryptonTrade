@@ -21,7 +21,7 @@ export default function CryptoList() {
 
   return (
     <>
-      <div className="bg-green-500 shadow rounded-xl overflow-hidden mb-10">
+      <div className=" shadow-2xl shadow-lime-500 rounded-xl overflow-hidden mb-10">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
