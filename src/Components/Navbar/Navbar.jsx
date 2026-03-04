@@ -19,15 +19,14 @@ export default function Navbar() {
               </Link>
             </li>
             <li className="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
-              {/* <li className="bg-green-200 border border-green-600 text-green-800 pl-3 pr-3 rounded-lg"> */}
-              <Link className="hover:text-green-500 font-medium text-2xl">
+              <Link to={`/converter`} className="hover:text-green-500 font-medium text-2xl">
                 Conversor
               </Link>
             </li>
           </ul>
         </nav>
       </header>
-      <div className="border-b border-gray-300 w-full"></div>
+      <div className=" border-b border-gray-300 w-full"></div>
     </>
   );
 }
