@@ -40,9 +40,20 @@ function CryptoProvider({ children }) {
     return data;
   }
 
+  async function translateText(text) {
+  
+    if (!text) return "";
+      const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.slice(0,500))}&langpair=autodetect|es`);
+
+      const data = await response.json();
+      const refactorText = data.responseData.translatedText
+      console.log(refactorText);
+      
+      return refactorText;
+  }
   return (
     <CryptoContext.Provider
-      value={{ getCryptosList, getCoinById, getCurrencyPricesPerDayById }}
+      value={{ getCryptosList, getCoinById, getCurrencyPricesPerDayById, translateText }}
     >
       {children}
     </CryptoContext.Provider>

@@ -1,8 +1,6 @@
 import { Link } from "react-router";
 import Graphic from "../Graphic/Graphic";
 export default function CrytoCard({ coin }) {
-  console.log(coin);
-  
   const coinValue = coin.current_price.toLocaleString("es-ES", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,

@@ -4,33 +4,19 @@ import { useParams } from "react-router";
 import Graphic from "../Graphic/Graphic";
 
 export default function CryptoDetails() {
-  const { getCoinById, getCurrencyPricesPerDayById } =
+  const { getCoinById, getCurrencyPricesPerDayById, translateText } =
     useContext(CryptoContext);
   const { id } = useParams();
   const [coin, setCoin] = useState({});
   const [totalDescription, setTotalDescription] = useState(false);
   const [viewDays, setViewDays] = useState(1);
   const [pricePerDays, setPricePerDays] = useState([]);
+  const [coinValue, setCoinValue] = useState(0);
+  const [marketCap, setMarketCap] = useState(0);
+  const [circulatingSupply, setCirculatingSupply] = useState(0);
+  const [priceChangePercentage24h, setPriceChangePercentage24h] = useState(0);
 
-  const coinValue = coin.market_data?.current_price?.eur.toLocaleString(
-    "es-ES",
-    {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    },
-  );
-
-  const marketCap = coin.market_data?.market_cap?.eur.toLocaleString("es-ES", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-
-  const circulating_supply =
-    coin.market_data?.circulating_supply.toLocaleString("es-ES", {
-    maximumFractionDigits: 0,
-  });
-
-const priceChangePercentage24h = coin?.market_data.price_change_percentage_24h
+  const [description, setDescription] = useState("");
 
   async function assignCoin() {
     const currentCoin = await getCoinById(id);
@@ -45,6 +31,29 @@ const priceChangePercentage24h = coin?.market_data.price_change_percentage_24h
     setPricePerDays(refactorCurrentPrices);
   }
 
+  async function assingValues() {
+    setCoinValue(
+      formatNumberToLocaleString(coin.market_data?.current_price.eur, 2),
+    );
+    setMarketCap(
+      formatNumberToLocaleString(coin.market_data?.market_cap.eur, 2),
+    );
+    setCirculatingSupply(
+      formatNumberToLocaleString(coin.market_data?.circulating_supply, 2),
+    );
+    setPriceChangePercentage24h(
+      coin.market_data?.price_change_percentage_24h.toFixed(1),
+    );
+    setDescription(await translateText(coin.description?.en))
+  }
+
+  function formatNumberToLocaleString(number, digits) {
+    return number.toLocaleString("es-ES", {
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    });
+  }
+
   useEffect(() => {
     assignCoin();
   }, []);
@@ -53,9 +62,17 @@ const priceChangePercentage24h = coin?.market_data.price_change_percentage_24h
     assigPricePerDays();
   }, [viewDays]);
 
+  useEffect(() => {
+    if (Object.keys(coin).length !== 0) {
+      if (coin.market_data != undefined) {
+        assingValues();
+      }
+    }
+  }, [coin]);
+
   return (
     <>
-      {console.log(coin)}
+      {/* {console.log(coin)} */}
       <div className="p-7 shadow-2xl shadow-lime-500 rounded-xl overflow-hidden mb-10">
         <div className="flex">
           <img src={coin.image?.small} alt="logo" className="mr-4" />
@@ -72,7 +89,7 @@ const priceChangePercentage24h = coin?.market_data.price_change_percentage_24h
             </div>
             <div>
               <p className="text-gray-500">Cantidad circulante:</p>
-              <p>{circulating_supply}</p>
+              <p>{circulatingSupply}</p>
             </div>
             <div>
               <p className="text-gray-500">Variacion del precio:</p>
@@ -82,32 +99,33 @@ const priceChangePercentage24h = coin?.market_data.price_change_percentage_24h
             </div>
             <div>
               <p className="text-gray-500">Descripción:</p>
-            
-            {totalDescription ? (
-              <div>
-                <p>{`${coin.description?.en}`}</p>
-                <button
-                  onClick={() => {
-                    setTotalDescription(false);
-                  }}
-                  className="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
-                >
-                  Ver menos
-                </button>
-              </div>
-            ) : (
-              <div>
-                <p>{`${coin.description?.en.slice(0, 500)}...`}</p>
-                <button
-                  onClick={() => {
-                    setTotalDescription(true);
-                  }}
-                  className="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
-                >
-                  Ver mas
-                </button>
-              </div>
-            )}</div>
+
+              {totalDescription ? (
+                <div>
+                  <p>{`${description}`}</p>
+                  <button
+                    onClick={() => {
+                      setTotalDescription(false);
+                    }}
+                    className="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
+                  >
+                    Ver menos
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <p>{`${description.slice(0, 500)}...`}</p>
+                  <button
+                    onClick={() => {
+                      setTotalDescription(true);
+                    }}
+                    className="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
+                  >
+                    Ver mas
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="w-2/3 overflow-hidden">
