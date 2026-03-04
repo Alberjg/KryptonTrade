@@ -26,7 +26,7 @@ export default function CryptoList() {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider">
-                Nombre
+                Activo
               </th>
 
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider">
