@@ -42,7 +42,10 @@ export default function CrytoCard({ coin }) {
   return (
     <tr className="bg-white">
       <td>
-        <Link className="flex px-6 py-4 items-center">
+        <Link
+          to={`/details/${coin.id}`}
+          className="flex px-6 py-4 items-center"
+        >
           <img
             src={coin.image}
             alt="image coin"
@@ -52,7 +55,7 @@ export default function CrytoCard({ coin }) {
           <p className="text-gray-500">{coin.name}</p>
         </Link>
       </td>
-      <td className="px-6 py-4">{`${coinValue}$`}</td>
+      <td className="px-6 py-4">{`${coinValue}€`}</td>
       <td
         className={`px-6 py-4 ${textColor1h}`}
       >{`${icon1h} ${priceChangePercentage1h}%`}</td>
@@ -60,7 +63,9 @@ export default function CrytoCard({ coin }) {
         className={`px-6 py-4 ${textColor24h}`}
       >{`${icon24h} ${priceChangePercentage24h}%`}</td>
       <td className="px-6 py-4">
-        <Graphic data={graphData} />
+        <div className="w-3xs h-12.5">
+          <Graphic data={graphData} />
+        </div>
       </td>
     </tr>
   );

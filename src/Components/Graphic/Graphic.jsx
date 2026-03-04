@@ -10,7 +10,7 @@ import {
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
 
-export default function Sparkline({ data }) {
+export default function Graphic({ data }) {
   const isPositive = data[data.length - 1] >= data[0];
   const color = isPositive ? "rgb(34, 197, 94)" : "rgb(239, 68, 68)";
 
@@ -34,9 +34,5 @@ export default function Sparkline({ data }) {
     },
   };
 
-  return (
-    <div className="w-3xs h-12.5">
-      <Line data={chartData} options={options} />
-    </div>
-  );
+  return <Line data={chartData} options={options} />;
 }
