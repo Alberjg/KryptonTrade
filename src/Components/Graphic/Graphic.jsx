@@ -10,9 +10,11 @@ import {
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
 
-export default function Graphic({ data }) {
+export default function Graphic({ data, details }) {
   const isPositive = data[data.length - 1] >= data[0];
   const color = isPositive ? "rgb(34, 197, 94)" : "rgb(239, 68, 68)";
+
+  
 
   const chartData = {
     labels: data.map((_, i) => i),
@@ -26,13 +28,26 @@ export default function Graphic({ data }) {
     ],
   };
 
-  const options = {
+  let options = {
     maintainAspectRatio: false,
     scales: {
       x: { display: false },
       y: { display: false },
     },
   };
+
+  if (details) {
+    options = {
+      scales: {
+        x: { display: false },
+        y: {
+          display: true,
+          ticks: { callback: (value) => `${value}€` },
+          position: "right",
+        },
+      },
+    };
+  }
 
   return <Line data={chartData} options={options} />;
 }

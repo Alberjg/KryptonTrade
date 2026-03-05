@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import CryptoContext from "../../Context/CryptoContext";
 import { useParams } from "react-router";
+import PercentageChange from "../PercentageCahange/PercentageChange";
 import Graphic from "../Graphic/Graphic";
 
 export default function CryptoDetails() {
@@ -15,7 +16,9 @@ export default function CryptoDetails() {
   const [marketCap, setMarketCap] = useState(0);
   const [circulatingSupply, setCirculatingSupply] = useState(0);
   const [priceChangePercentage24h, setPriceChangePercentage24h] = useState(0);
-
+  const [priceChangePercentage7d, setPriceChangePercentage7d] = useState(0);
+  const [priceChangePercentage1m, setPriceChangePercentage1m] = useState(0);
+  const [priceChangePercentage1y, setPriceChangePercentage1y] = useState(0);
   const [description, setDescription] = useState("");
 
   async function assignCoin() {
@@ -33,18 +36,21 @@ export default function CryptoDetails() {
 
   async function assingValues() {
     setCoinValue(
-      formatNumberToLocaleString(coin.market_data?.current_price.eur, 2),
+      formatNumberToLocaleString(coin.market_data.current_price.eur, 2),
     );
     setMarketCap(
-      formatNumberToLocaleString(coin.market_data?.market_cap.eur, 2),
+      formatNumberToLocaleString(coin.market_data.market_cap.eur, 2),
     );
     setCirculatingSupply(
-      formatNumberToLocaleString(coin.market_data?.circulating_supply, 2),
+      formatNumberToLocaleString(coin.market_data.circulating_supply, 0),
     );
-    setPriceChangePercentage24h(
-      coin.market_data?.price_change_percentage_24h.toFixed(1),
-    );
-    setDescription(await translateText(coin.description?.en))
+    setPriceChangePercentage24h(coin.market_data.price_change_percentage_24h);
+    setPriceChangePercentage7d(coin.market_data.price_change_percentage_7d);
+    setPriceChangePercentage1m(coin.market_data.price_change_percentage_30d);
+    setPriceChangePercentage1y(coin.market_data.price_change_percentage_1y);
+
+    const text = await translateText(coin.description?.en);
+    setDescription(text);
   }
 
   function formatNumberToLocaleString(number, digits) {
@@ -64,9 +70,7 @@ export default function CryptoDetails() {
 
   useEffect(() => {
     if (Object.keys(coin).length !== 0) {
-      if (coin.market_data != undefined) {
-        assingValues();
-      }
+      assingValues();
     }
   }, [coin]);
 
@@ -93,8 +97,27 @@ export default function CryptoDetails() {
             </div>
             <div>
               <p className="text-gray-500">Variacion del precio:</p>
-              <div className="flex">
-                <p>{priceChangePercentage24h}</p>
+              <div>
+                <div className="flex gap-8">
+                  <div className="flex gap-2">
+                    <p>{`24h`}</p>
+                    <PercentageChange percentage={priceChangePercentage24h} />
+                  </div>
+                  <div className="flex gap-2">
+                    <p>{`1s`}</p>
+                    <PercentageChange percentage={priceChangePercentage7d} />
+                  </div>
+                </div>
+                <div className="flex gap-6">
+                  <div className="flex gap-2">
+                    <p>{`1m`}</p>
+                    <PercentageChange percentage={priceChangePercentage1m} />
+                  </div>
+                  <div className="flex gap-2">
+                    <p>{`1a`}</p>
+                    <PercentageChange percentage={priceChangePercentage1y} />
+                  </div>
+                </div>
               </div>
             </div>
             <div>
@@ -102,7 +125,7 @@ export default function CryptoDetails() {
 
               {totalDescription ? (
                 <div>
-                  <p>{`${description}`}</p>
+                  <p>{description ? description : coin.description?.en}</p>
                   <button
                     onClick={() => {
                       setTotalDescription(false);
@@ -114,7 +137,11 @@ export default function CryptoDetails() {
                 </div>
               ) : (
                 <div>
-                  <p>{`${description.slice(0, 500)}...`}</p>
+                  <p>
+                    {description
+                      ? `${description.slice(0, 500)}...`
+                      : coin.description?.en.slice(0, 500)}
+                  </p>
                   <button
                     onClick={() => {
                       setTotalDescription(true);
@@ -130,7 +157,7 @@ export default function CryptoDetails() {
 
           <div className="w-2/3 overflow-hidden">
             <div className="ml-8 h-96">
-              <Graphic data={pricePerDays} />
+              <Graphic data={pricePerDays} details={true}/>
             </div>
             <div className="flex mt-4 gap-2 justify-end">
               <button

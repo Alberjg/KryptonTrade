@@ -26,7 +26,7 @@ function CryptoProvider({ children }) {
     return data;
   }
 
-  async function getCurrencyPricesPerDayById(id, days) { 
+  async function getCurrencyPricesPerDayById(id, days) {
     const response = await fetch(
       `${API_URL}${id}${import.meta.env.VITE_API_URL_COIN_DETAILS}${days}`,
       {
@@ -41,19 +41,24 @@ function CryptoProvider({ children }) {
   }
 
   async function translateText(text) {
-  
     if (!text) return "";
-      const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.slice(0,500))}&langpair=autodetect|es`);
+    const response = await fetch(
+      `${import.meta.env.VITE_API_TRANSLATE_URL}${encodeURIComponent(text)}`,
+    );
+    const data = await response.json();
+    const refactorText = data.translation;
 
-      const data = await response.json();
-      const refactorText = data.responseData.translatedText
-      console.log(refactorText);
-      
-      return refactorText;
+    return refactorText;
   }
+
   return (
     <CryptoContext.Provider
-      value={{ getCryptosList, getCoinById, getCurrencyPricesPerDayById, translateText }}
+      value={{
+        getCryptosList,
+        getCoinById,
+        getCurrencyPricesPerDayById,
+        translateText,
+      }}
     >
       {children}
     </CryptoContext.Provider>
