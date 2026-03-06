@@ -26,7 +26,7 @@ function CryptoProvider({ children }) {
     return data;
   }
 
-  async function getCurrencyPricesPerDayById(id, days) { 
+  async function getCurrencyPricesPerDayById(id, days) {
     const response = await fetch(
       `${API_URL}${id}${import.meta.env.VITE_API_URL_COIN_DETAILS}${days}`,
       {
@@ -40,9 +40,25 @@ function CryptoProvider({ children }) {
     return data;
   }
 
+  async function translateText(text) {
+    if (!text) return "";
+    const response = await fetch(
+      `${import.meta.env.VITE_API_TRANSLATE_URL}${encodeURIComponent(text)}`,
+    );
+    const data = await response.json();
+    const refactorText = data.translation;
+
+    return refactorText;
+  }
+
   return (
     <CryptoContext.Provider
-      value={{ getCryptosList, getCoinById, getCurrencyPricesPerDayById }}
+      value={{
+        getCryptosList,
+        getCoinById,
+        getCurrencyPricesPerDayById,
+        translateText,
+      }}
     >
       {children}
     </CryptoContext.Provider>
