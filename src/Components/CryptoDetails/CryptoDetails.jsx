@@ -81,7 +81,6 @@ export default function CryptoDetails() {
     }
   }, [coin]);
 
-
   return (
     <>
       <div className="p-7 shadow-2xl shadow-lime-500 rounded-xl overflow-hidden mb-10">
@@ -168,9 +167,10 @@ export default function CryptoDetails() {
             </div>
             <div className="flex mt-4 gap-2 justify-end">
               {buttonDays.map((time, index) => {
-                const days = time.days
+                const days = time.days;
                 return (
-                  <button key={index}
+                  <button
+                    key={index}
                     onClick={() => {
                       setViewDays(days);
                     }}
