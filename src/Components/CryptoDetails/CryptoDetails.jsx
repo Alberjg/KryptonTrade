@@ -21,6 +21,13 @@ export default function CryptoDetails() {
   const [priceChangePercentage1y, setPriceChangePercentage1y] = useState(0);
   const [description, setDescription] = useState("");
 
+  const buttonDays = [
+    { days: 1, text: "24h" },
+    { days: 7, text: "1S" },
+    { days: 30, text: "1M" },
+    { days: 365, text: "1A" },
+  ];
+
   async function assignCoin() {
     const currentCoin = await getCoinById(id);
     setCoin(currentCoin);
@@ -74,9 +81,9 @@ export default function CryptoDetails() {
     }
   }, [coin]);
 
+
   return (
     <>
-      {/* {console.log(coin)} */}
       <div className="p-7 shadow-2xl shadow-lime-500 rounded-xl overflow-hidden mb-10">
         <div className="flex">
           <img src={coin.image?.small} alt="logo" className="mr-4" />
@@ -157,41 +164,22 @@ export default function CryptoDetails() {
 
           <div className="w-2/3 overflow-hidden">
             <div className="ml-8 h-96">
-              <Graphic data={pricePerDays} details={true}/>
+              <Graphic data={pricePerDays} details={true} />
             </div>
             <div className="flex mt-4 gap-2 justify-end">
-              <button
-                onClick={() => {
-                  setViewDays(1);
-                }}
-                className="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
-              >
-                24h
-              </button>
-              <button
-                onClick={() => {
-                  setViewDays(7);
-                }}
-                className="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
-              >
-                1S
-              </button>
-              <button
-                onClick={() => {
-                  setViewDays(30);
-                }}
-                className="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
-              >
-                1M
-              </button>
-              <button
-                onClick={() => {
-                  setViewDays(365);
-                }}
-                className="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
-              >
-                1A
-              </button>
+              {buttonDays.map((time, index) => {
+                const days = time.days
+                return (
+                  <button key={index}
+                    onClick={() => {
+                      setViewDays(days);
+                    }}
+                    className="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
+                  >
+                    {time.text}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
