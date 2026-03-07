@@ -22,12 +22,21 @@ export default function CryptoDetails() {
   const [priceChangePercentage1y, setPriceChangePercentage1y] = useState(0);
   const [description, setDescription] = useState("");
 
-  const buttonDays = [
-    { days: 1, text: "24h" },
-    { days: 7, text: "1S" },
-    { days: 30, text: "1M" },
-    { days: 365, text: "1A" },
+  const buttonsDays = [
+    { action: () => setViewDays(1), text: "24h" },
+    { action: () => setViewDays(7), text: "1S" },
+    { action: () => setViewDays(30), text: "1M" },
+    { action: () => setViewDays(365), text: "1A" },
   ];
+
+  const buttonSeeMore = {
+    action: () => setTotalDescription(true),
+    text: "Ver más",
+  };
+  const buttonSeeLess = {
+    action: () => setTotalDescription(false),
+    text: "Ver menos",
+  };
 
   async function assignCoin() {
     const currentCoin = await getCoinById(id);
@@ -134,9 +143,8 @@ export default function CryptoDetails() {
                 <div>
                   <p>{description ? description : coin.description?.en}</p>
                   <Button
-                    text={"Ver menos"}
-                    action={setTotalDescription}
-                    param={false}
+                    text={buttonSeeLess.text}
+                    action={buttonSeeLess.action}
                   />
                 </div>
               ) : (
@@ -147,9 +155,8 @@ export default function CryptoDetails() {
                       : coin.description?.en.slice(0, 500)}
                   </p>
                   <Button
-                    text={"Ver más"}
-                    action={setTotalDescription}
-                    param={true}
+                    text={buttonSeeMore.text}
+                    action={buttonSeeMore.action}
                   />
                 </div>
               )}
@@ -161,15 +168,9 @@ export default function CryptoDetails() {
               <Graphic data={pricePerDays} details={true} />
             </div>
             <div className="flex mt-4 gap-2 justify-end">
-              {buttonDays.map((time, index) => {
-                const days = time.days;
+              {buttonsDays.map((time, index) => {
                 return (
-                  <Button
-                    key={index}
-                    text={time.text}
-                    action={setViewDays}
-                    param={days}
-                  />
+                  <Button key={index} text={time.text} action={time.action} />
                 );
               })}
             </div>
