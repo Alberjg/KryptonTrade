@@ -23,19 +23,19 @@ export default function CryptoDetails() {
   const [description, setDescription] = useState("");
 
   const buttonsDays = [
-    { action: () => setViewDays(1), text: "24h" },
-    { action: () => setViewDays(7), text: "1S" },
-    { action: () => setViewDays(30), text: "1M" },
-    { action: () => setViewDays(365), text: "1A" },
+    { text: "24h", onClick: () => setViewDays(1) },
+    { text: "1S", onClick: () => setViewDays(7) },
+    { text: "1M", onClick: () => setViewDays(30) },
+    { text: "1A", onClick: () => setViewDays(365) },
   ];
 
   const buttonSeeMore = {
-    action: () => setTotalDescription(true),
     text: "Ver más",
+    onClick: () => setTotalDescription(true),
   };
   const buttonSeeLess = {
-    action: () => setTotalDescription(false),
     text: "Ver menos",
+    onClick: () => setTotalDescription(false),
   };
 
   async function assignCoin() {
@@ -144,7 +144,7 @@ export default function CryptoDetails() {
                   <p>{description ? description : coin.description?.en}</p>
                   <Button
                     text={buttonSeeLess.text}
-                    action={buttonSeeLess.action}
+                    onClick={buttonSeeLess.onClick}
                   />
                 </div>
               ) : (
@@ -156,7 +156,7 @@ export default function CryptoDetails() {
                   </p>
                   <Button
                     text={buttonSeeMore.text}
-                    action={buttonSeeMore.action}
+                    onClick={buttonSeeMore.onClick}
                   />
                 </div>
               )}
@@ -170,7 +170,7 @@ export default function CryptoDetails() {
             <div className="flex mt-4 gap-2 justify-end">
               {buttonsDays.map((time, index) => {
                 return (
-                  <Button key={index} text={time.text} action={time.action} />
+                  <Button key={index} text={time.text} onClick={time.onClick} />
                 );
               })}
             </div>
