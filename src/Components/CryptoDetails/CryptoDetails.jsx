@@ -3,6 +3,7 @@ import CryptoContext from "../../Context/CryptoContext";
 import { useParams } from "react-router";
 import PercentageChange from "../PercentageCahange/PercentageChange";
 import Graphic from "../Graphic/Graphic";
+import Button from "../Button/Button";
 
 export default function CryptoDetails() {
   const { getCoinById, getCurrencyPricesPerDayById, translateText } =
@@ -21,12 +22,21 @@ export default function CryptoDetails() {
   const [priceChangePercentage1y, setPriceChangePercentage1y] = useState(0);
   const [description, setDescription] = useState("");
 
-  const buttonDays = [
-    { days: 1, text: "24h" },
-    { days: 7, text: "1S" },
-    { days: 30, text: "1M" },
-    { days: 365, text: "1A" },
+  const buttonsDays = [
+    { text: "24h", onClick: () => setViewDays(1) },
+    { text: "1S", onClick: () => setViewDays(7) },
+    { text: "1M", onClick: () => setViewDays(30) },
+    { text: "1A", onClick: () => setViewDays(365) },
   ];
+
+  const buttonSeeMore = {
+    text: "Ver más",
+    onClick: () => setTotalDescription(true),
+  };
+  const buttonSeeLess = {
+    text: "Ver menos",
+    onClick: () => setTotalDescription(false),
+  };
 
   async function assignCoin() {
     const currentCoin = await getCoinById(id);
@@ -132,14 +142,10 @@ export default function CryptoDetails() {
               {totalDescription ? (
                 <div>
                   <p>{description ? description : coin.description?.en}</p>
-                  <button
-                    onClick={() => {
-                      setTotalDescription(false);
-                    }}
-                    className="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
-                  >
-                    Ver menos
-                  </button>
+                  <Button
+                    text={buttonSeeLess.text}
+                    onClick={buttonSeeLess.onClick}
+                  />
                 </div>
               ) : (
                 <div>
@@ -148,14 +154,10 @@ export default function CryptoDetails() {
                       ? `${description.slice(0, 500)}...`
                       : coin.description?.en.slice(0, 500)}
                   </p>
-                  <button
-                    onClick={() => {
-                      setTotalDescription(true);
-                    }}
-                    className="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
-                  >
-                    Ver mas
-                  </button>
+                  <Button
+                    text={buttonSeeMore.text}
+                    onClick={buttonSeeMore.onClick}
+                  />
                 </div>
               )}
             </div>
@@ -166,18 +168,9 @@ export default function CryptoDetails() {
               <Graphic data={pricePerDays} details={true} />
             </div>
             <div className="flex mt-4 gap-2 justify-end">
-              {buttonDays.map((time, index) => {
-                const days = time.days;
+              {buttonsDays.map((time, index) => {
                 return (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      setViewDays(days);
-                    }}
-                    className="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
-                  >
-                    {time.text}
-                  </button>
+                  <Button key={index} text={time.text} onClick={time.onClick} />
                 );
               })}
             </div>
