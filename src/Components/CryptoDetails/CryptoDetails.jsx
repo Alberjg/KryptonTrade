@@ -93,49 +93,48 @@ export default function CryptoDetails() {
 
   return (
     <>
-      <div className="p-7 shadow-2xl shadow-lime-500 rounded-xl overflow-hidden mb-10">
-        <div className="flex">
-          <img src={coin.image?.small} alt="logo" className="mr-4" />
-          <div className="flex items-baseline">
-            <h2 className="text-5xl font-bold">{coin.name}</h2>
-            <p className="text-3xl ml-3 text-gray-500">{`${coinValue}€`}</p>
-          </div>
+      <div className="flex">
+        <img src={coin.image?.small} alt="logo" className="mr-4" />
+        <div className="flex items-baseline">
+          <h2 className="text-5xl font-bold">{coin.name}</h2>
+          <p className="text-3xl ml-3 text-gray-500">{`${coinValue}€`}</p>
         </div>
-        <div className="flex overflow-hidden mt-8">
-          <div className="w-1/3 overflow-hidden">
+      </div>
+      <div className="flex overflow-hidden mt-8">
+        <div className="w-1/3 overflow-hidden">
+          <div>
+            <p className="text-gray-500">Cap. de mercado:</p>
+            <p>{`${marketCap}€`}</p>
+          </div>
+          <div>
+            <p className="text-gray-500">Cantidad circulante:</p>
+            <p>{circulatingSupply}</p>
+          </div>
+          <div>
+            <p className="text-gray-500">Variacion del precio:</p>
             <div>
-              <p className="text-gray-500">Cap. de mercado:</p>
-              <p>{`${marketCap}€`}</p>
-            </div>
-            <div>
-              <p className="text-gray-500">Cantidad circulante:</p>
-              <p>{circulatingSupply}</p>
-            </div>
-            <div>
-              <p className="text-gray-500">Variacion del precio:</p>
-              <div>
-                <div className="flex gap-8">
-                  <div className="flex gap-2">
-                    <p>{`24h`}</p>
-                    <PercentageChange percentage={priceChangePercentage24h} />
-                  </div>
-                  <div className="flex gap-2">
-                    <p>{`1s`}</p>
-                    <PercentageChange percentage={priceChangePercentage7d} />
-                  </div>
+              <div className="flex gap-8">
+                <div className="flex gap-2">
+                  <p>{`24h`}</p>
+                  <PercentageChange percentage={priceChangePercentage24h} />
                 </div>
-                <div className="flex gap-6">
-                  <div className="flex gap-2">
-                    <p>{`1m`}</p>
-                    <PercentageChange percentage={priceChangePercentage1m} />
-                  </div>
-                  <div className="flex gap-2">
-                    <p>{`1a`}</p>
-                    <PercentageChange percentage={priceChangePercentage1y} />
-                  </div>
+                <div className="flex gap-2">
+                  <p>{`1s`}</p>
+                  <PercentageChange percentage={priceChangePercentage7d} />
+                </div>
+              </div>
+              <div className="flex gap-6">
+                <div className="flex gap-2">
+                  <p>{`1m`}</p>
+                  <PercentageChange percentage={priceChangePercentage1m} />
+                </div>
+                <div className="flex gap-2">
+                  <p>{`1a`}</p>
+                  <PercentageChange percentage={priceChangePercentage1y} />
                 </div>
               </div>
             </div>
+
             <div>
               <p className="text-gray-500">Descripción:</p>
 
@@ -163,19 +162,27 @@ export default function CryptoDetails() {
             </div>
           </div>
 
-          <div className="w-2/3 overflow-hidden">
-            <div className="ml-8 h-96">
-              <Graphic data={pricePerDays} details={true} />
-            </div>
-            <div className="flex mt-4 gap-2 justify-end">
-              {buttonsDays.map((time, index) => {
-                return (
-                  <Button key={index} text={time.text} onClick={time.onClick} />
-                );
-              })}
-            </div>
-          </div>
+        
+
+            
+          
         </div>
+        <div className="w-2/3 overflow-hidden">
+              <div className="ml-8 h-96">
+                <Graphic data={pricePerDays} details={true} />
+              </div>
+              <div className="flex mt-4 gap-2 justify-end">
+                {buttonsDays.map((time, index) => {
+                  return (
+                    <Button
+                      key={index}
+                      text={time.text}
+                      onClick={time.onClick}
+                    />
+                  );
+                })}
+              </div>
+            </div>
       </div>
     </>
   );
