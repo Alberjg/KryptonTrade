@@ -3,7 +3,7 @@ import CryptoProvider from "./Context/CryptoProvider";
 import Navbar from "./Components/Navbar/Navbar";
 import CryptoList from "./Components/CryptoList/CryptoList";
 import CryptoDetails from "./Components/CryptoDetails/CryptoDetails";
-import CryptoConverter from "./Components/CryptoConverter/CriptoConverter";
+import CryptoConverter from "./Components/CryptoConverter/CryptoConverter";
 
 function App() {
   return (

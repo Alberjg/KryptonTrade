@@ -161,28 +161,19 @@ export default function CryptoDetails() {
               )}
             </div>
           </div>
-
-        
-
-            
-          
         </div>
         <div className="w-2/3 overflow-hidden">
-              <div className="ml-8 h-96">
-                <Graphic data={pricePerDays} details={true} />
-              </div>
-              <div className="flex mt-4 gap-2 justify-end">
-                {buttonsDays.map((time, index) => {
-                  return (
-                    <Button
-                      key={index}
-                      text={time.text}
-                      onClick={time.onClick}
-                    />
-                  );
-                })}
-              </div>
-            </div>
+          <div className="ml-8 h-96">
+            <Graphic data={pricePerDays} details={true} />
+          </div>
+          <div className="flex mt-4 gap-2 justify-end">
+            {buttonsDays.map((time, index) => {
+              return (
+                <Button key={index} text={time.text} onClick={time.onClick} />
+              );
+            })}
+          </div>
+        </div>
       </div>
     </>
   );

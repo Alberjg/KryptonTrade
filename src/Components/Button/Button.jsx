@@ -1,6 +1,4 @@
 export default function Button({ text, onClick}) {    
-  // console.log(action);
-  
   return (
     <button
       onClick={() => {

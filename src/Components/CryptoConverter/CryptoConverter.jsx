@@ -1,0 +1,108 @@
+import { useContext, useEffect, useState } from "react";
+import CryptoContext from "../../Context/CryptoContext";
+import changeImg from "../../assets/changeImg.png";
+export default function CryptoConverter() {
+  const { getCoinsListSelect } = useContext(CryptoContext);
+  const [listCoins, setListSelect] = useState([]);
+  const [selectedCoin, setSelectedCoin] = useState("Bitcoin");
+  const [coinToConvert, setCoinToConvert] = useState("EUR");
+  const [selectedValue, setSelectedValue] = useState(1);
+  const [result, setResult] = useState(0);
+
+  async function getLists() {
+    const coins = await getCoinsListSelect();
+    setListSelect([{ coin: "EUR", price: 1 }, ...coins]);
+  }
+
+  function changePosition(e) {
+    e.preventDefault();
+    setSelectedCoin(coinToConvert);
+    setCoinToConvert(selectedCoin);
+    setSelectedValue(result);
+    setResult(selectedValue);
+  }
+
+  useEffect(() => {
+    getLists();
+  }, []);
+
+  useEffect(() => {
+    if (listCoins.length > 0) {
+      const priceCoinToConvert = listCoins.find(
+        (coin) => coin.coin === coinToConvert,
+      ).price;
+      const priceSelectedCoin = listCoins.find(
+        (coin) => coin.coin === selectedCoin,
+      ).price;
+
+      const result = (selectedValue * priceSelectedCoin) / priceCoinToConvert;
+
+      setResult(result);
+    }
+  }, [selectedCoin, coinToConvert, selectedValue, listCoins]);
+
+  return (
+    <div className="flex justify-center m-15">
+      <div>
+        <h2 className="text-3xl font-bold mb-4 text-center">
+          Conversor de criptomonedas
+        </h2>
+        <form>
+          <div className="flex">
+            <div className="flex flex-col">
+              <select
+                name=""
+                id=""
+                value={selectedCoin}
+                onChange={(e) => setSelectedCoin(e.target.value)}
+              >
+                {listCoins.map((coin, index) => {
+                  return (
+                    <option key={index} value={coin.coin}>
+                      {coin.coin}
+                    </option>
+                  );
+                })}
+              </select>
+              <input
+                type="number"
+                value={selectedValue}
+                className="border rounded-xl overflow-hidden p-1 pl-2"
+                onChange={(e) => setSelectedValue(e.target.value)}
+              />
+            </div>
+
+            <button
+              className="m-3.5 text-3xl border rounded-xl"
+              onClick={changePosition}
+            >
+              <img src={changeImg} alt="" className="w-12" />
+            </button>
+
+            <div className="flex flex-col">
+              <select
+                name=""
+                id=""
+                value={coinToConvert}
+                onChange={(e) => setCoinToConvert(e.target.value)}
+              >
+                {listCoins.map((coin, index) => {
+                  return (
+                    <option key={index} value={coin.coin}>
+                      {coin.coin}
+                    </option>
+                  );
+                })}
+              </select>
+              <input
+                type="number"
+                value={result}
+                className="border rounded-xl overflow-hidden p-1 pl-2"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
