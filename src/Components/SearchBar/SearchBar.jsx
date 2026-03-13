@@ -36,7 +36,7 @@ export default function SearchBar() {
         className="py-2 pl-4 pr-10 text-sm bg-gray-100  rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
         onChange={search}
         onBlur={() => setTimeout(() => setCoinSought(""), [100])}
-        value={coinSought}
+        defaultValue={coinSought}
       />
       {coinSought.length > 0 && (
         <ul className="absolute bg-gray-200 rounded-lg mt-[1px] ring-2 ring-lime-500">
