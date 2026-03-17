@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import whiteLogo from "../../assets/whiteLogo.png";
+import SearchBar from "../SearchBar/SearchBar";
 export default function Navbar() {
   return (
     <>
@@ -7,6 +8,7 @@ export default function Navbar() {
         <Link to={"/"}>
           <img src={whiteLogo} alt="logo" className="w-90" />
         </Link>
+        <SearchBar/>
         <nav>
           <ul className="flex p-5">
             <li className="mr-5 bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">

@@ -79,10 +79,11 @@ export default function CryptoDetails() {
 
   useEffect(() => {
     assignCoin();
-  }, []);
+    assigPricePerDays();
+  }, [id]);
 
   useEffect(() => {
-    assigPricePerDays();
+    
   }, [viewDays]);
 
   useEffect(() => {
@@ -90,9 +91,10 @@ export default function CryptoDetails() {
       assingValues();
     }
   }, [coin]);
-
+  
   return (
     <>
+   
       <div className="flex">
         <img src={coin.image?.small} alt="logo" className="mr-4" />
         <div className="flex items-baseline">
