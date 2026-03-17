@@ -51,6 +51,17 @@ function CryptoProvider({ children }) {
     return refactorText;
   }
 
+  async function getCoinsListSelect() {
+    const coins = await getCryptosList()
+    let list = []
+    coins.map((coin)=>{
+      list.push({coin: coin.name, price: coin.current_price})
+    })
+    return list
+  }
+
+
+
   return (
     <CryptoContext.Provider
       value={{
@@ -58,6 +69,7 @@ function CryptoProvider({ children }) {
         getCoinById,
         getCurrencyPricesPerDayById,
         translateText,
+        getCoinsListSelect
       }}
     >
       {children}
