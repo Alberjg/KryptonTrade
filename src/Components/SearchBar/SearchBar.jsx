@@ -6,9 +6,9 @@ export default function SearchBar() {
   const [coinSought, setCoinSought] = useState("");
   const [coinList, setCoinList] = useState([]);
   const [listCoinsSought, setListCoinsSought] = useState([]);
-  function search(e) {
-    setCoinSought(e.target.value);
-    const buscar = e.target.value;
+  function search(event) {
+    setCoinSought(event.target.value);
+    const buscar = event.target.value;
     const list = coinList.filter((coin) =>
       coin.name.toLowerCase().includes(buscar.toLowerCase()),
     );
