@@ -1,42 +1,43 @@
-import { useContext, useEffect, useState } from "react";
-import CryptoContext from "../../Context/CryptoContext";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import PercentageChange from "../PercentageCahange/PercentageChange";
+import PercentageChange from "../PercentageChange/PercentageChange";
 import Graphic from "../Graphic/Graphic";
 import Button from "../Button/Button";
+import {
+  getCoinById,
+  getCurrencyPricesPerDayById,
+  translateText,
+} from "../../Services/ApiServices";
 
 export default function CryptoDetails() {
-  const { getCoinById, getCurrencyPricesPerDayById, translateText } =
-    useContext(CryptoContext);
   const { id } = useParams();
   const [coin, setCoin] = useState({});
   const [totalDescription, setTotalDescription] = useState(false);
   const [viewDays, setViewDays] = useState(1);
   const [pricePerDays, setPricePerDays] = useState([]);
-  const [coinValue, setCoinValue] = useState(0);
-  const [marketCap, setMarketCap] = useState(0);
-  const [circulatingSupply, setCirculatingSupply] = useState(0);
-  const [priceChangePercentage24h, setPriceChangePercentage24h] = useState(0);
-  const [priceChangePercentage7d, setPriceChangePercentage7d] = useState(0);
-  const [priceChangePercentage1m, setPriceChangePercentage1m] = useState(0);
-  const [priceChangePercentage1y, setPriceChangePercentage1y] = useState(0);
-  const [description, setDescription] = useState("");
+  const [refactoredCoin, setRefactoredCoin] = useState({});
 
   const buttonsDays = [
-    { text: "24h", onClick: () => setViewDays(1) },
-    { text: "1S", onClick: () => setViewDays(7) },
-    { text: "1M", onClick: () => setViewDays(30) },
-    { text: "1A", onClick: () => setViewDays(365) },
+    { label: "24h", days: 1 },
+    { label: "1S", days: 7 },
+    { label: "1M", days: 30 },
+    { label: "1A", days: 365 },
   ];
 
-  const buttonSeeMore = {
-    text: "Ver más",
-    onClick: () => setTotalDescription(true),
-  };
-  const buttonSeeLess = {
-    text: "Ver menos",
-    onClick: () => setTotalDescription(false),
-  };
+  useEffect(() => {
+    assignCoin();
+    assigPricePerDays();
+  }, [id]);
+
+  useEffect(() => {
+    assigPricePerDays();
+  }, [viewDays]);
+
+  useEffect(() => {
+    if (Object.keys(coin).length !== 0) {
+      assingValues();
+    }
+  }, [coin]);
 
   async function assignCoin() {
     const currentCoin = await getCoinById(id);
@@ -52,22 +53,36 @@ export default function CryptoDetails() {
   }
 
   async function assingValues() {
-    setCoinValue(
-      formatNumberToLocaleString(coin.market_data.current_price.eur, 2),
-    );
-    setMarketCap(
-      formatNumberToLocaleString(coin.market_data.market_cap.eur, 2),
-    );
-    setCirculatingSupply(
-      formatNumberToLocaleString(coin.market_data.circulating_supply, 0),
-    );
-    setPriceChangePercentage24h(coin.market_data.price_change_percentage_24h);
-    setPriceChangePercentage7d(coin.market_data.price_change_percentage_7d);
-    setPriceChangePercentage1m(coin.market_data.price_change_percentage_30d);
-    setPriceChangePercentage1y(coin.market_data.price_change_percentage_1y);
-
-    const text = await translateText(coin.description?.en);
-    setDescription(text);
+    const currentCoin = {
+      name: coin.name,
+      image: coin.image?.small,
+      value: formatNumberToLocaleString(coin.market_data.current_price.eur, 2),
+      marketCap: formatNumberToLocaleString(coin.market_data.market_cap.eur, 2),
+      circulatingSupply: formatNumberToLocaleString(
+        coin.market_data.circulating_supply,
+        0,
+      ),
+      priceChangePercentage: [
+        {
+          label: "24h",
+          percentage: coin.market_data.price_change_percentage_24h,
+        },
+        {
+          label: "1s",
+          percentage: coin.market_data.price_change_percentage_7d,
+        },
+        {
+          label: "1m",
+          percentage: coin.market_data.price_change_percentage_30d,
+        },
+        {
+          label: "1a",
+          percentage: coin.market_data.price_change_percentage_1y,
+        },
+      ],
+      description: await translateText(coin.description?.en),
+    };
+    setRefactoredCoin(currentCoin);
   }
 
   function formatNumberToLocaleString(number, digits) {
@@ -77,91 +92,70 @@ export default function CryptoDetails() {
     });
   }
 
-  useEffect(() => {
-    assignCoin();
-    assigPricePerDays();
-  }, [id]);
+  if (Object.keys(refactoredCoin).length === 0) {
+    return <div>Cargando datos de criptomoneda...</div>;
+  }
 
-  useEffect(() => {
-    
-  }, [viewDays]);
-
-  useEffect(() => {
-    if (Object.keys(coin).length !== 0) {
-      assingValues();
-    }
-  }, [coin]);
-  
   return (
     <>
-   
       <div className="flex">
-        <img src={coin.image?.small} alt="logo" className="mr-4" />
+        <img src={refactoredCoin.image} alt="logo" className="mr-4" />
         <div className="flex items-baseline">
-          <h2 className="text-5xl font-bold">{coin.name}</h2>
-          <p className="text-3xl ml-3 text-gray-500">{`${coinValue}€`}</p>
+          <h2 className="text-5xl font-bold">{refactoredCoin.name}</h2>
+          <p className="text-3xl ml-3 text-gray-500">{`${refactoredCoin.value}€`}</p>
         </div>
       </div>
       <div className="flex overflow-hidden mt-8">
         <div className="w-1/3 overflow-hidden">
           <div>
             <p className="text-gray-500">Cap. de mercado:</p>
-            <p>{`${marketCap}€`}</p>
+            <p>{`${refactoredCoin.marketCap}€`}</p>
           </div>
           <div>
             <p className="text-gray-500">Cantidad circulante:</p>
-            <p>{circulatingSupply}</p>
+            <p>{refactoredCoin.circulatingSupply}</p>
           </div>
           <div>
             <p className="text-gray-500">Variacion del precio:</p>
-            <div>
-              <div className="flex gap-8">
-                <div className="flex gap-2">
-                  <p>{`24h`}</p>
-                  <PercentageChange percentage={priceChangePercentage24h} />
-                </div>
-                <div className="flex gap-2">
-                  <p>{`1s`}</p>
-                  <PercentageChange percentage={priceChangePercentage7d} />
-                </div>
-              </div>
-              <div className="flex gap-6">
-                <div className="flex gap-2">
-                  <p>{`1m`}</p>
-                  <PercentageChange percentage={priceChangePercentage1m} />
-                </div>
-                <div className="flex gap-2">
-                  <p>{`1a`}</p>
-                  <PercentageChange percentage={priceChangePercentage1y} />
-                </div>
-              </div>
+            <div className="flex flex-wrap">
+              {refactoredCoin.priceChangePercentage.map((time, index) => {
+                return (
+                  <div key={index} className="flex w-1/2 gap-2">
+                    <p>{time.label}</p>
+                    <PercentageChange percentage={time.percentage} />
+                  </div>
+                );
+              })}
             </div>
+          </div>
+          <div>
+            <p className="text-gray-500">Descripción:</p>
 
-            <div>
-              <p className="text-gray-500">Descripción:</p>
-
-              {totalDescription ? (
-                <div>
-                  <p>{description ? description : coin.description?.en}</p>
-                  <Button
-                    text={buttonSeeLess.text}
-                    onClick={buttonSeeLess.onClick}
-                  />
-                </div>
-              ) : (
-                <div>
-                  <p>
-                    {description
-                      ? `${description.slice(0, 500)}...`
-                      : coin.description?.en.slice(0, 500)}
-                  </p>
-                  <Button
-                    text={buttonSeeMore.text}
-                    onClick={buttonSeeMore.onClick}
-                  />
-                </div>
-              )}
-            </div>
+            {totalDescription ? (
+              <div>
+                <p>
+                  {refactoredCoin.description
+                    ? refactoredCoin.description
+                    : coin.description?.en}
+                </p>
+                <Button
+                  label="Ver menos"
+                  onClick={() => setTotalDescription(false)}
+                />
+              </div>
+            ) : (
+              <div>
+                <p className="line-clamp-10">
+                  {refactoredCoin.description
+                    ? refactoredCoin.description
+                    : coin.description?.en}
+                </p>
+                <Button
+                  label="Ver mas"
+                  onClick={() => setTotalDescription(true)}
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="w-2/3 overflow-hidden">
@@ -171,7 +165,11 @@ export default function CryptoDetails() {
           <div className="flex mt-4 gap-2 justify-end">
             {buttonsDays.map((time, index) => {
               return (
-                <Button key={index} text={time.text} onClick={time.onClick} />
+                <Button
+                  key={index}
+                  label={time.label}
+                  onClick={() => setViewDays(time.days)}
+                />
               );
             })}
           </div>

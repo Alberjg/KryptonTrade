@@ -1,13 +1,11 @@
-import { useContext, useState, useEffect } from "react";
-import CryptoContext from "../../Context/CryptoContext";
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
+import { getCryptosList } from "../../Services/ApiServices";
 
 export default function SearchBar() {
   const [coinSought, setCoinSought] = useState("");
   const [coinList, setCoinList] = useState([]);
   const [listCoinsSought, setListCoinsSought] = useState([]);
-  const { getCryptosList } = useContext(CryptoContext);
-
   function search(e) {
     setCoinSought(e.target.value);
     const buscar = e.target.value;

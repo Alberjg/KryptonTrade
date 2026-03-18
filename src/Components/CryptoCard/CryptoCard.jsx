@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import Graphic from "../Graphic/Graphic";
-import PercentageChange from "../PercentageCahange/PercentageChange";
+import PercentageChange from "../PercentageChange/PercentageChange";
 export default function CrytoCard({ coin }) {
   const coinValue = coin.current_price.toLocaleString("es-ES", {
     minimumFractionDigits: 2,

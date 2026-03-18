@@ -1,12 +1,10 @@
-import { useContext, useEffect, useState } from "react";
-import CryptoContext from "../../Context/CryptoContext";
+import { useEffect, useState } from "react";
 import CryptoCard from "../CryptoCard/CryptoCard";
+import { getCryptosList } from "../../Services/ApiServices";
 
 export default function CryptoList() {
   const [loading, setLoading] = useState(false);
   const [cryptosList, setCryptosList] = useState([]);
-  const { getCryptosList } = useContext(CryptoContext);
-
   useEffect(() => {
     setLoading(true);
     getCryptosList().then((data) => {
