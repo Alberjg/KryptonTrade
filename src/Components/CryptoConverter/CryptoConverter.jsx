@@ -28,17 +28,11 @@ export default function CryptoConverter() {
   }, [selectedCoin, coinToConvert, selectedValue, listCoins]);
 
   async function getLists() {
-    const coins = await getCoinsListSelect();
-    setListSelect([{ coin: "EUR", price: 1 }, ...coins]);
-  }
-
-  async function getCoinsListSelect() {
     const coins = await getCryptosList();
-    let list = [];
-    coins.map((coin) => {
-      list.push({ coin: coin.name, price: coin.current_price });
+    let list = coins.map((coin) => {
+      return { coin: coin.name, price: coin.current_price };
     });
-    return list;
+    setListSelect([{ coin: "EUR", price: 1 }, ...list]);
   }
 
   function handleResultChange(event) {
