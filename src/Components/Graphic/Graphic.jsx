@@ -17,7 +17,7 @@ export default function Graphic({ data, details }) {
   
 
   const chartData = {
-    labels: data.map((_, i) => i),
+    labels: data.map((_, index) => index),
     datasets: [
       {
         data: data,

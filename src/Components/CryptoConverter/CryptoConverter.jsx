@@ -1,26 +1,12 @@
-import { useContext, useEffect, useState } from "react";
-import CryptoContext from "../../Context/CryptoContext";
+import { useEffect, useState } from "react";
+import { getCryptosList } from "../../Services/ApiServices";
 import changeImg from "../../assets/changeImg.png";
 export default function CryptoConverter() {
-  const { getCoinsListSelect } = useContext(CryptoContext);
   const [listCoins, setListSelect] = useState([]);
   const [selectedCoin, setSelectedCoin] = useState("Bitcoin");
   const [coinToConvert, setCoinToConvert] = useState("EUR");
   const [selectedValue, setSelectedValue] = useState(1);
   const [result, setResult] = useState(0);
-
-  async function getLists() {
-    const coins = await getCoinsListSelect();
-    setListSelect([{ coin: "EUR", price: 1 }, ...coins]);
-  }
-
-  function changePosition(e) {
-    e.preventDefault();
-    setSelectedCoin(coinToConvert);
-    setCoinToConvert(selectedCoin);
-    setSelectedValue(result);
-    setResult(selectedValue);
-  }
 
   useEffect(() => {
     getLists();
@@ -41,6 +27,39 @@ export default function CryptoConverter() {
     }
   }, [selectedCoin, coinToConvert, selectedValue, listCoins]);
 
+  async function getLists() {
+    const coins = await getCryptosList();
+    let list = coins.map((coin) => {
+      return { coin: coin.name, price: coin.current_price };
+    });
+    setListSelect([{ coin: "EUR", price: 1 }, ...list]);
+  }
+
+  function handleResultChange(event) {
+    const resultValue = event.target.value;
+    setResult(resultValue);
+
+    if (listCoins.length > 0) {
+      const priceSelectedCoin = listCoins.find(
+        (coin) => coin.coin === selectedCoin,
+      )?.price;
+      const priceCoinToConvert = listCoins.find(
+        (coin) => coin.coin === coinToConvert,
+      )?.price;
+
+      const inverseRes = (resultValue * priceCoinToConvert) / priceSelectedCoin;
+      setSelectedValue(inverseRes);
+    }
+  }
+
+  function changePosition(event) {
+    event.preventDefault();
+    setSelectedCoin(coinToConvert);
+    setCoinToConvert(selectedCoin);
+    setSelectedValue(result);
+    setResult(selectedValue);
+  }
+
   return (
     <div className="flex justify-center m-15">
       <div>
@@ -54,7 +73,7 @@ export default function CryptoConverter() {
                 name=""
                 id=""
                 value={selectedCoin}
-                onChange={(e) => setSelectedCoin(e.target.value)}
+                onChange={(event) => setSelectedCoin(event.target.value)}
               >
                 {listCoins.map((coin, index) => {
                   return (
@@ -68,7 +87,7 @@ export default function CryptoConverter() {
                 type="number"
                 value={selectedValue}
                 className="border rounded-xl overflow-hidden p-1 pl-2"
-                onChange={(e) => setSelectedValue(e.target.value)}
+                onChange={(event) => setSelectedValue(event.target.value)}
               />
             </div>
 
@@ -84,7 +103,7 @@ export default function CryptoConverter() {
                 name=""
                 id=""
                 value={coinToConvert}
-                onChange={(e) => setCoinToConvert(e.target.value)}
+                onChange={(event) => setCoinToConvert(event.target.value)}
               >
                 {listCoins.map((coin, index) => {
                   return (
@@ -98,6 +117,7 @@ export default function CryptoConverter() {
                 type="number"
                 value={result}
                 className="border rounded-xl overflow-hidden p-1 pl-2"
+                onChange={handleResultChange}
               />
             </div>
           </div>

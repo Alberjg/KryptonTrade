@@ -1,4 +1,4 @@
-export default function Button({ text, onClick}) {    
+export default function Button({ label, onClick}) {    
   return (
     <button
       onClick={() => {
@@ -6,7 +6,7 @@ export default function Button({ text, onClick}) {
       }}
       className="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
     >
-      {text}
+      {label}
     </button>
   );
 }
