@@ -11,6 +11,7 @@ import {
 
 export default function CryptoDetails() {
   const { id } = useParams();
+  const [error, setError] = useState(null);
   const [coin, setCoin] = useState({});
   const [totalDescription, setTotalDescription] = useState(false);
   const [viewDays, setViewDays] = useState(1);
@@ -25,12 +26,20 @@ export default function CryptoDetails() {
   ];
 
   useEffect(() => {
-    assignCoin();
-    assigPricePerDays();
+    try {
+      assignCoin();
+      assigPricePerDays();
+    } catch (error) {
+      setError("No se pudieron cargar los datos. Intenta de nuevo mas tarde.");
+    }
   }, [id]);
 
   useEffect(() => {
-    assigPricePerDays();
+    try {
+      assigPricePerDays();
+    } catch (error) {
+      setError("No se pudieron cargar los datos. Intenta de nuevo mas tarde.");
+    }
   }, [viewDays]);
 
   useEffect(() => {
@@ -94,6 +103,10 @@ export default function CryptoDetails() {
 
   if (Object.keys(refactoredCoin).length === 0) {
     return <div>Cargando datos de criptomoneda...</div>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">{error}</p>;
   }
 
   return (

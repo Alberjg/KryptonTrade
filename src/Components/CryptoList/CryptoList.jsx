@@ -4,17 +4,26 @@ import { getCryptosList } from "../../Services/ApiServices";
 
 export default function CryptoList() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [cryptosList, setCryptosList] = useState([]);
   useEffect(() => {
-    setLoading(true);
-    getCryptosList().then((data) => {
-      setCryptosList(data);
-      setLoading(false);
-    });
+    try {
+      setLoading(true);
+      getCryptosList().then((data) => {
+        setCryptosList(data);
+        setLoading(false);
+      });
+    } catch (error) {
+      setError("No se pudieron cargar los datos. Intenta de nuevo mas tarde.");
+    }
   }, []);
 
   if (loading) {
     return <div>Cargando...</div>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">{error}</p>;
   }
 
   return (
