@@ -37,7 +37,7 @@ export default function SearchBar() {
         defaultValue={coinSought}
       />
       {coinSought.length > 0 && (
-        <ul className="absolute bg-gray-200 rounded-lg mt-[1px] ring-2 ring-lime-500">
+        <ul className="absolute bg-gray-200 rounded-lg mt-[px] ring-2 ring-lime-500">
           {listCoinsSought.map((coin, index) => {
             return (
               <Link
