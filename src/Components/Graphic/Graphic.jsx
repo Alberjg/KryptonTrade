@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Line } from "react-chartjs-2";
 import {
   Chart,
@@ -13,8 +14,6 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
 export default function Graphic({ data, details }) {
   const isPositive = data[data.length - 1] >= data[0];
   const color = isPositive ? "rgb(34, 197, 94)" : "rgb(239, 68, 68)";
-
-  
 
   const chartData = {
     labels: data.map((_, index) => index),
@@ -51,3 +50,8 @@ export default function Graphic({ data, details }) {
 
   return <Line data={chartData} options={options} />;
 }
+
+Graphic.propTypes = {
+  data: PropTypes.number.isRequired,
+  details: PropTypes.bool,
+};

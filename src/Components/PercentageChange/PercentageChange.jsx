@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 export default function PercentageChange({ percentage }) {
   let icon = "";
   let color = "";
@@ -13,3 +14,7 @@ export default function PercentageChange({ percentage }) {
 
   return <p className={color}>{`${icon} ${percentage.toFixed(1)}%`}</p>;
 }
+
+PercentageChange.propTypes = {
+  percentage: PropTypes.number.isRequired,
+};
