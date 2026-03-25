@@ -100,7 +100,11 @@ export default function CryptoDetails() {
       <div className="flex overflow-hidden mt-8">
         <div className="w-1/3 overflow-hidden">
           <CryptoStats coin={refactoredCoin} />
-          <CryptoDescription refactoredCoin={refactoredCoin} coin={coin} />
+          {refactoredCoin.description ? (
+            <CryptoDescription description={refactoredCoin.description} />
+          ) : (
+            <CryptoDescription description={coin.description?.en} />
+          )}
         </div>
         <PriceChart id={id} />
       </div>
