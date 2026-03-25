@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import Graphic from "../Graphic/Graphic";
 import Button from "../Button/Button";
 import { TIME_PERIODS } from "../../Constants/chart";
@@ -14,7 +15,7 @@ export default function PriceChart({ id }) {
   }, [viewDays, id]);
 
   async function assigPricePerDays() {
-    setError(null)
+    setError(null);
     try {
       const currentPricePerDays = await getCurrencyPricesPerDayById(
         id,
@@ -52,3 +53,7 @@ export default function PriceChart({ id }) {
     </div>
   );
 }
+
+PriceChart.PropTypes = {
+  id: PropTypes.string.isRequired,
+};

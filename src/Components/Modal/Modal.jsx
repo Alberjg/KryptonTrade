@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import Button from "../Button/Button";
 export default function Modal({ text, close }) {
   return (
@@ -9,3 +10,8 @@ export default function Modal({ text, close }) {
     </div>
   );
 }
+
+Modal.PropTypes = {
+  text: PropTypes.string.isRequired,
+  close: PropTypes.func.isRequired,
+};

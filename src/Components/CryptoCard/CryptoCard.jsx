@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import PropTypes from "prop-types";
 import Graphic from "../Graphic/Graphic";
 import PercentageChange from "../PercentageChange/PercentageChange";
-export default function CryptoCard({ coin, falso }) {
+export default function CryptoCard({ coin }) {
   const coinValue = coin.current_price.toLocaleString("es-ES", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 import Button from "../Button/Button";
 import Modal from "../Modal/Modal";
 
@@ -18,3 +19,7 @@ export default function CryptoDescription({ description }) {
     </div>
   );
 }
+
+CryptoDescription.PropTypes = {
+  description: PropTypes.string.isRequired,
+};

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import PercentageChange from "../PercentageChange/PercentageChange";
 export default function CryptoStats({ coin }) {
   return (
@@ -26,3 +27,7 @@ export default function CryptoStats({ coin }) {
     </div>
   );
 }
+
+CryptoStats.PropTypes = {
+  coin: PropTypes.object.isRequired,
+};
