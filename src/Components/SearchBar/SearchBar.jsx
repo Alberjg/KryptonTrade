@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { getCryptosList } from "../../Services/ApiServices";
 
-export default function SearchBar() {
+export default function SearchBar({coinList}) {
   const [coinSought, setCoinSought] = useState("");
-  const [coinList, setCoinList] = useState([]);
   const [listCoinsSought, setListCoinsSought] = useState([]);
+
   function search(event) {
     setCoinSought(event.target.value);
     const buscar = event.target.value;
@@ -19,12 +18,6 @@ export default function SearchBar() {
     setCoinSought("");
     setListCoinsSought([]);
   }
-
-  useEffect(() => {
-    getCryptosList().then((data) => {
-      setCoinList(data);
-    });
-  }, []);
 
   return (
     <div className="p-5 relative">
